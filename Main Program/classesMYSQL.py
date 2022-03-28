@@ -1500,27 +1500,27 @@ class Process(Input):
     # This Method adds the forecasted values from the machine learning/custom algorithm to the dataframe using The
     # pointer to traverse through each array to form a row which is added to the Dataframe
     def AddForecastValuestoDF(self, dataframe):
-        Rear = 0
+        Front = 0
         m1 = 0
         lastrow = dataframe.shape[0] - 1
         lastyear = int(dataframe['Year'].iloc[lastrow])
         newyear = int(lastyear + 1)
         students = int(dataframe['NoOfStudents'].iloc[lastrow])
         for i in range(12):
-            self.NewYearColumnQueue[Rear] = newyear
-            self.NoOfStudentsQueue[Rear] = students
+            self.NewYearColumnQueue[Front] = newyear
+            self.NoOfStudentsQueue[Front] = students
             date = datetime.date(newyear, m1 + 1, 1)
-            self.DateQueue[Rear] = date
-            Rear = Rear + 1
+            self.DateQueue[Front] = date
+            Front = Front + 1
             m1 = m1 + 1
-        for Front in range(12):
-            row_to_append = [self.NewYearColumnQueue[Front], self.MonthsQueue[Front], self.DateQueue[Front],
-                             self.FinalQueueIncome[Front], self.FinalQueueEstablishmentPay[Front],
-                             self.FinalQueueVariablePay[Front],
-                             self.FinalQueueAgencyPay[Front], self.FinalQueueOtherPay[Front],
-                             self.FinalQueueTotalPay[Front],
-                             self.FinalQueueNonPay[Front], self.FinalQueueSurplusDeficit[Front],
-                             self.NoOfStudentsQueue[Front]]
+        for Rear in range(12):
+            row_to_append = [self.NewYearColumnQueue[Rear], self.MonthsQueue[Rear], self.DateQueue[Rear],
+                             self.FinalQueueIncome[Rear], self.FinalQueueEstablishmentPay[Rear],
+                             self.FinalQueueVariablePay[Rear],
+                             self.FinalQueueAgencyPay[Rear], self.FinalQueueOtherPay[Rear],
+                             self.FinalQueueTotalPay[Rear],
+                             self.FinalQueueNonPay[Rear], self.FinalQueueSurplusDeficit[Rear],
+                             self.NoOfStudentsQueue[Rear]]
             dataframe_length = len(dataframe)
             dataframe.loc[dataframe_length] = row_to_append
         return dataframe
