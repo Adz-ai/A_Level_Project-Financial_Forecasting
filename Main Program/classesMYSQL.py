@@ -24,7 +24,8 @@ try:
     from sklearn.preprocessing import MinMaxScaler  # This is a Sklearn Machine Learning Library
     from sqlalchemy import create_engine  # This allows the program to communicate with SQL databases
     from sqlalchemy.types import Integer, Float, String  # This allows the process different SQL Datatypes
-
+    import openpyxl
+    import xlrd
     pymysql.install_as_MySQLdb()  # This import allows the program to connect the SQL Database
 except ImportError:
     # This informs the User that they don't have the correct libraries to install the program and Hence the Program
