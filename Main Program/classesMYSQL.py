@@ -52,6 +52,7 @@ class Main:
         self.username = None
         self.password = None
         self.dbname = None
+        self.port = None
         self.Spreadsheet = ""
         self.HistoricalData = ""
         self.Department = ""
@@ -99,6 +100,12 @@ class Main:
 
     def Setdbname(self, dbname):
         self.dbname = dbname
+
+    def Setport(self, port):
+        self.port = port
+
+    def Getport(self):
+        return self.port
 
     def Gethostname(self):
         return self.hostname
@@ -213,7 +220,14 @@ class Main:
             MySQLCheck = input()
             if MySQLCheck == 'YES':
                 print()
-                data.Sethostname('localhost')
+                time.sleep(1)
+                hostname = input("Please Type Hostname for MySQL Database: ")
+                data.Sethostname(hostname)
+                print()
+                time.sleep(1)
+                port = int(input("Please Type Port for MySQL Database: "))
+                data.Setport(port)
+                print()
                 time.sleep(1)
                 username = input("Please Type Username for MySQL Database: ")
                 data.Setusername(username)
@@ -239,7 +253,8 @@ class Main:
                 data.Setdftpath(Path)
                 with open("configtempcheck.txt", 'w') as file:
                     file.write("{}\n".format(data.Getpath()))
-                    file.write("{}\n".format("localhost"))
+                    file.write("{}\n".format(data.Gethostname()))
+                    file.write("{}\n".format(data.Getport()))
                     file.write("{}\n".format(data.Getusername()))
                     file.write("{}\n".format(data.Getpassword()))
                     file.write("{}\n".format(data.Getdbname()))
@@ -254,9 +269,10 @@ class Main:
             data.Setpath(str(strippedlines[0]))
             data.Setdftpath(str(strippedlines[0]))
             data.Sethostname(str(strippedlines[1]))
-            data.Setusername(str(strippedlines[2]))
-            data.Setpassword(str(strippedlines[3]))
-            data.Setdbname(str(strippedlines[4]))
+            data.Setport(str(strippedlines[2]))
+            data.Setusername(str(strippedlines[3]))
+            data.Setpassword(str(strippedlines[4]))
+            data.Setdbname(str(strippedlines[5]))
             if not self.Startup(data):
                 self.StartupError(2)
 
@@ -776,7 +792,7 @@ class Main:
                 self.Option3(data)
             if MenuOption == 4:
                 self.Option4(data)
-        if MenuOption == 6:
+        if MenuOption == 5:
             self.Option6()
 
 
@@ -874,14 +890,16 @@ class Initialise(Output):
     # Checks Credentials provided by user or in config file to see if connection can be established
     def InitialiseSQL(self):
         try:
-            self.mydb = mysql.connector.connect(host=self.Gethostname(), user=self.Getusername(),
+            self.mydb = mysql.connector.connect(host=self.Gethostname(), port=self.Getport(),
+                                                user=self.Getusername(),
                                                 password=self.Getpassword(), database=self.Getdbname(), autocommit=True)
             if self.mydb.is_connected():
                 self.cursor = self.mydb.cursor()
                 return True
         except:
             try:
-                self.mydb = mysql.connector.connect(host=self.Gethostname(), user=self.Getusername(),
+                self.mydb = mysql.connector.connect(host=self.Gethostname(), port=self.Getport(),
+                                                    user=self.Getusername(),
                                                     password=self.Getpassword(), autocommit=True)
                 if self.mydb.is_connected():
                     self.cursor = self.mydb.cursor()
@@ -897,7 +915,7 @@ class Initialise(Output):
 
     # Path of MYSQL DB
     def MYSQLPath(self):
-        return f"mysql://{self.username}:{self.password}@{self.hostname}/{self.dbname}"
+        return f"mysql://{self.username}:{self.password}@{self.hostname}:{self.port}/{self.dbname}"
 
     # Method Used to pass Query/commands to SQL DB using the cursor
     def Query(self, query, wanttoquery):
@@ -1442,6 +1460,7 @@ class Process(Input):
         # plot forecast
         model.plot(forecast)
         pyplot.show()
+
     # This is the Custom ML Algorithm. First it gets the year for the first and last row in the dataframe and then
     # minuses them and then adds 1 to calculate how many years of data entry does the dataframe have. Then the dataframe
     # passes in the Department the user wants to forecast for into the method that matches the user requested Department

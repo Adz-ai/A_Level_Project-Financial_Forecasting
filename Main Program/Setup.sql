@@ -1,7 +1,7 @@
 use ncc;
 CREATE TABLE college (CampusCode INT,CampusName varchar(20),CampusLocation varchar(255),CampusAddress varchar(255),PRIMARY KEY (CampusCode));
-CREATE TABLE department (CampusCode INT,DepartmentCode INT,NameOfDepartment varchar(255),PRIMARY KEY (DepartmentCode),FOREIGN KEY (CampusCode) REFERENCES College(CampusCode));
-CREATE TABLE historical_data (CampusCode INT,DepartmentCode INT,Year YEAR,Months varchar(20),Date DATE,Income FLOAT,EstablishmentPay FLOAT,VariablePay FLOAT,AgencyPay FLOAT,OtherPay FLOAT,TotalPay FLOAT,NonPay FLOAT,SurplusDeficit FLOAT,NoOfStudents INT,FOREIGN KEY (CampusCode) REFERENCES College(CampusCode),FOREIGN KEY (DepartmentCode) REFERENCES department(DepartmentCode));
+CREATE TABLE department (CampusCode INT,DepartmentCode INT,NameOfDepartment varchar(255),PRIMARY KEY (DepartmentCode),FOREIGN KEY (CampusCode) REFERENCES college(CampusCode));
+CREATE TABLE historical_data (CampusCode INT,DepartmentCode INT,Year YEAR,Months varchar(20),Date DATE,Income FLOAT,EstablishmentPay FLOAT,VariablePay FLOAT,AgencyPay FLOAT,OtherPay FLOAT,TotalPay FLOAT,NonPay FLOAT,SurplusDeficit FLOAT,NoOfStudents INT,FOREIGN KEY (CampusCode) REFERENCES college(CampusCode),FOREIGN KEY (DepartmentCode) REFERENCES department(DepartmentCode));
 INSERT INTO college (CampusCode, CampusName, CampusLocation, CampusAddress) VALUES (1, 'Redbridge', 'Chadwell Heath', 'RM6 4XT');
 INSERT INTO college (CampusCode, CampusName, CampusLocation, CampusAddress) VALUES (2, 'Epping', 'Debden', 'IG10 3SA');
 INSERT INTO college (CampusCode, CampusName, CampusLocation, CampusAddress) VALUES (3, 'Hackney', 'Hoxton', 'N1 6HQ');
